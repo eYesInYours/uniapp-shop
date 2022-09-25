@@ -55,7 +55,7 @@
             "urlCheck" : false,
             "es6" : true,
             "minified" : true,
-			"checkSiteMap": false
+            "checkSiteMap" : false
         },
         "usingComponents" : true
     },

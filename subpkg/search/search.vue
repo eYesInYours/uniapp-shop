@@ -63,7 +63,7 @@
 			deleteHistory(){
 				this.historyList = []
 			},
-			navToGoodList(item){
+			navToGoodList(kw){
 				uni.navigateTo({
 					url:'/subpkg/good_list/good_list?query='+kw
 				})

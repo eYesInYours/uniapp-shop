@@ -1,8 +1,13 @@
 <template>
 	<view>
+		<!-- 搜索框 -->
+		<view class="search-box">
+			<search></search>
+		</view>
+		
 		<!-- 轮播图 -->
 		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" circular>
-			<swiper-item v-for="(item,index) in swiperList" key="index">
+			<swiper-item v-for="(item,index) in swiperList" :key="index">
 				<navigator class="swiper-item" :url="'/subpkg/good_detail/good_detail?goods_id='+item.goods_id">
 					<image :src="item.image_src"></image>
 				</navigator>
@@ -122,4 +127,9 @@ swiper-item{
 		justify-content: space-around;
 	}
 }
+	.search-box{
+		position:sticky;
+		top:0;
+		z-index:20;
+	}
 </style>

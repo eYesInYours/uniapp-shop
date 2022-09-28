@@ -1,5 +1,9 @@
 <template>
 	<view>
+		<view class="search-box">
+			<search></search>
+		</view>
+		
 		<view class="scroll-view-container">
 			
 			<scroll-view class="scroll-view-left" scroll-y="true" :style="{height:wh+'px'}">
@@ -13,7 +17,7 @@
 					<view class="scroll-view-right-title">/ {{item2.cat_name}} /</view>
 					
 					<view class="scroll-view-right-cateLevel3-list">
-						<navigator :url="'/subpkg/good_list/good_list?cid='+item3.cat_id" class="scroll-view-right-cateLevel3-item" v-for="(item3,index3) in item2.children">
+						<navigator :url="'/subpkg/good_list/good_list?cid='+item3.cat_id" class="scroll-view-right-cateLevel3-item" v-for="(item3,index3) in item2.children" :key="index3">
 							<image :src="item3.cat_icon"></image>
 							<text>{{item3.cat_name}}</text>
 						</navigator>
@@ -41,7 +45,7 @@
 			//获取设备信息
 			const sysInfo = uni.getSystemInfoSync()
 			const wh = sysInfo.windowHeight
-			this.wh = wh
+			this.wh = wh - 50		// 减去搜索框组件高度
 		},
 		methods:{
 			async getCateList(){
@@ -123,5 +127,11 @@
 				}
 			}
 		}
+	}
+	
+	.search-box{
+		position:sticky;
+		top:0;
+		z-index:20;
 	}
 </style>

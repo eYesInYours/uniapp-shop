@@ -30,6 +30,7 @@
 </template>
 
 <script>
+	import badge from '@/mixins/tabBar-badge.js'
 	export default {
 		data() {
 			return {
@@ -40,6 +41,7 @@
 				scrollTop:0,	
 			};
 		},
+		mixins:[badge],
 		onLoad(){
 			this.getCateList()
 			//获取设备信息

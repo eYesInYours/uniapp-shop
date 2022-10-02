@@ -3,9 +3,9 @@
 	<view v-if="goodsInfo.goods_price">
 		<!-- 轮播图 -->
 		<view class="swiper-box">
-			<swiper :indicator-dots="true" :autoplay="true" :interval="4000" :duration="1000" circular="true">
-				<swiper-item v-for="(item,index) in swiperList" :key="index">
-					<image :src="item.pics_big" @click="preview(index)"></image>
+			<swiper class="swiper-container" :indicator-dots="true" :autoplay="true" :interval="4000" :duration="1000" circular="true">
+				<swiper-item class="swiper-item" v-for="(item,index) in swiperList" :key="index">
+					<image class="item-image" :src="item.pics_big" @click="preview(index)"></image>
 				</swiper-item>
 			</swiper>
 		</view>
@@ -17,7 +17,7 @@
 				<view class="goods-name-left">{{goodsInfo.goods_name}}</view>
 				<view class="goods-name-right">
 					<uni-icons type="star" size="22" color="gray"></uni-icons>
-					<text>收藏</text>
+					<text class="right-text">收藏</text>
 				</view>
 			</view>
 			<view class="goods-express">快递：免运费</view>
@@ -30,13 +30,32 @@
 		
 		<!-- 底部导航 -->
 		<view class="goods-bottom-nav">
-			<uni-goods-nav :fill="true"  :options="options" :buttonGroup="buttonGroup"  @click="onClick" @buttonClick="" />
+			<uni-goods-nav :fill="true"  :options="options" :buttonGroup="buttonGroup"  @click="onClick" @buttonClick="buttonClick"/>
 		</view>
+		
 	</view>
 </template>
 
 <script>
+	import { mapState, mapMutations, mapGetters } from 'vuex'
+	
 	export default {
+		computed:{
+			...mapState('m_cart',['cart']),
+			...mapGetters('m_cart',['total'])
+		},
+		watch:{
+			total:{
+				handler(newVal){
+					// 可以这样做，但是如果新添加图标就要重新修改
+					// this.options[1].info = newVal
+					
+					const findResult = this.options.find(x => x.text == "购物车")
+					if(findResult)	findResult.info = newVal
+				},
+				immediate:true
+			}
+		},
 		data() {
 			return {
 				goodsInfo:{},
@@ -49,7 +68,7 @@
 				    }, {
 				      icon: 'cart',
 				      text: '购物车',
-				      info: 2
+				      info: this.total
 				    }],
 				// 右侧按钮组的配置对象
 				buttonGroup: [{
@@ -94,17 +113,31 @@
 						url:'/pages/cart/cart'
 					})
 				}
-			},
+			},		
+			...mapMutations('m_cart',['addToCart']),
+			buttonClick(e) {
+			   if (e.content.text === '加入购物车') {
+				  const goods = {
+					 goods_id: this.goodsInfo.goods_id,
+					 goods_name: this.goodsInfo.goods_name,
+					 goods_price: this.goodsInfo.goods_price,
+					 goods_count: 1,
+					 goods_small_logo: this.goodsInfo.goods_small_logo,
+					 goods_state: true    // 商品的勾选状态
+				  }
+				  this.addToCart(goods)
+			   }
 		}
-	}
+	},
+}
 </script>
 
 <style lang="less">
 	.swiper-box{
-		swiper{
+		.swiper-container{
 			height:680rpx;
-			swiper-item{
-				image{
+			.swiper-item{
+				.item-image{
 					width:100%;
 					height:100%;
 				}
@@ -133,7 +166,7 @@
 				justify-content: center;
 				align-items: center;
 				border-left:1px solid #efefef;
-				text{
+				.right-text{
 					font-size:13px;
 					color:gray;
 				}

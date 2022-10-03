@@ -15,6 +15,14 @@ $http.beforeRequest = function(options){
 	uni.showLoading({
 		title:"数据加载中...",
 	})
+	// console.log(options)
+	// 支付相关：含my的为有权限的接口
+	if(options.url.indexOf('/my/') !== -1){
+		// 请求之前为请求头添加身份认证字段
+		options.header = {
+			Authorization:store.state.m_user.token
+		}
+	}
 }
 // 响应拦截器
 $http.afterRequest = function(options){
